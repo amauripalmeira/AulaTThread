@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,16 +16,18 @@ import javax.swing.JTextField;
 
 public class Tela extends JDialog{
 	
-	JPanel jpainel = new JPanel(new GridBagLayout());
+	private JPanel jpainel = new JPanel(new GridBagLayout());
 	
-	JLabel descricaoNome = new JLabel("Nome");
-	JTextField nome = new JTextField();
+	private JLabel descricaoNome = new JLabel("Nome");
+	private JTextField nome = new JTextField();
 	
-	JLabel descricaoEmail = new JLabel("Email");
-	JTextField email = new JTextField();
+	private JLabel descricaoEmail = new JLabel("Email");
+	private JTextField email = new JTextField();
 			
-	JButton jbutton = new JButton("Gerar");
-	JButton jbutton2 = new JButton("Stop");
+	private JButton jbutton = new JButton("Gerar");
+	private JButton jbutton2 = new JButton("Stop");
+	
+	private FIlaThread fila = new FIlaThread();
 	
 	public Tela () {
 		/*criando a tela */
@@ -56,6 +60,7 @@ public class Tela extends JDialog{
 		
 	    //*****************************
 	    //adicionado botões 
+	    grid.gridwidth = 1 ;
 	    jbutton.setPreferredSize(new Dimension(90, 20));
 	    grid.gridy++;
 	    jpainel.add(jbutton, grid);
@@ -64,6 +69,39 @@ public class Tela extends JDialog{
 	    grid.gridx++;
 	    jpainel.add(jbutton2, grid);
 	    
+	    /*acao do botao gerar */
+	    
+	    jbutton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) { /*executa o click do botao*/
+				if (fila == null) {
+					fila = new FIlaThread();
+					fila.start();
+				}
+				for(int qtd=0; qtd<100; qtd++) { /*simular envio em massa */
+					ObjetoThread filaThread = new ObjetoThread();
+					filaThread.setNome(nome.getText());
+					filaThread.setEmail(email.getText());
+					fila.add(filaThread);
+					jbutton.setEnabled(false);
+					jbutton2.setEnabled(true);
+				}
+				
+			}
+		});
+	    /*acao do segundo botao */
+	    jbutton2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fila.stop(); 
+				fila = null;
+				jbutton2.setEnabled(false);
+				jbutton.setEnabled(true);
+			}
+		});
+	    fila.start();
 	    
 		add(jpainel , BorderLayout.WEST);
 		setVisible(true);

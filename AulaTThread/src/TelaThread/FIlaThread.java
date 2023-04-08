@@ -16,7 +16,7 @@ public class FIlaThread extends Thread {
 			Iterator interaçao = fila.iterator();
 			synchronized (interaçao) {/*bloquer o acesso a lista por outros processos*/
 				while(interaçao.hasNext()) {/* vai processar enquanto tiver dados */ 
-					ObjetoThread processar = new ObjetoThread();/*criando um objeto */
+					ObjetoThread processar = (ObjetoThread) interaçao.next();/*criando um objeto */
 					
 					try {
 						Thread.sleep(1000);/*vai dar um tempo para descarga de memoria */
