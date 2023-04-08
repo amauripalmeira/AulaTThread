@@ -60,6 +60,11 @@ public class Tela extends JDialog{
 	    grid.gridy++;
 	    jpainel.add(jbutton, grid);
 	    
+	    jbutton2.setPreferredSize(new Dimension(90, 20));
+	    grid.gridx++;
+	    jpainel.add(jbutton2, grid);
+	    
+	    
 		add(jpainel , BorderLayout.WEST);
 		setVisible(true);
 	}
